@@ -97,7 +97,7 @@ func handlebbody(url string, resp *http.Response) (Url string, Title string, Pow
 }
 func main() {
 	Flag()
-	if UrlFile ==""{
+	if UrlFile == "" {
 		Banner()
 		flag.Usage()
 		os.Exit(0)
@@ -115,40 +115,37 @@ func main() {
 		fmt.Println("Error opening file:", err)
 		return
 	}
-	defer file.Close()
-	//pool := make(chan struct{}, 50000)
-	lineCount := 0  		
-	for scanner.Scan() {		
-		lineCount++  	
-		if lineCount > 1000 {	
-			wg.Wait()  	
-			lineCount = 1  	
+	defer file1.Close()  // Correct the defer statement to close file1 instead of file again
+
+	lineCount := 0
+	for scanner.Scan() {
+		lineCount++
+		if lineCount > 1000 {
+			wg.Wait()  // Wait for all goroutines to finish before resetting count
+			lineCount = 1
 		}
-  
+
+		wg.Add(1)  // Ensure wg.Add is called right before the goroutine starts
 		i := scanner.Text()
-		if i[:4] == "http" || i[:5] == "https" {
-		} else {
+		if !(strings.HasPrefix(i, "http") || strings.HasPrefix(i, "https")) {
 			i = "http://" + i
 		}
-		//pool <- struct{}{}
-		//fmt.Println(i)
 		go func(j string) {
-			defer wg.Done()
-			//defer func() { <-pool }()
+			defer wg.Done()  // Correctly pairs with wg.Add(1)
 			Url, _, _, _ := handle(j)
 			if len(Url) == 0 {
 				return
 			}
 			if _, err := file1.WriteString(Url + "\n"); err != nil {
-					fmt.Println("Error writing to file:", err)
-				}
+				fmt.Println("Error writing to file:", err)
+			}
 			fmt.Printf("%s \n", Url)
 		}(i)
 	}
-	wg.Wait()
+	wg.Wait()  // Wait for all goroutines to finish before proceeding
 	if err := scanner.Err(); err != nil {
 		panic(err)
 	}
-	end := time.Since(start) / 1e9
-	fmt.Printf("\n用时%d", end)
+	end := time.Since(start).Seconds()
+	fmt.Printf("\n用时%d秒\n", int(end))
 }
