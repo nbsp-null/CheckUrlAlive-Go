@@ -120,7 +120,7 @@ func main() {
 	lineCount := 0
 	for scanner.Scan() {
 		lineCount++
-		if lineCount > 10000 {
+		if lineCount > 5000 {
 			wg.Wait()  // Wait for all goroutines to finish before resetting count
 			lineCount = 1
 		}
