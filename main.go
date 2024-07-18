@@ -124,16 +124,6 @@ func main() {
 			wg.Wait()  	
 			lineCount = 1  	
 		}
-
-    
-          
-            
-    
-
-          
-          Expand Down
-    
-    
   
 		i := scanner.Text()
 		if i[:4] == "http" || i[:5] == "https" {
