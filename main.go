@@ -142,7 +142,7 @@ func main() {
 		//fmt.Println(i)
 		go func(j string) {
 			defer wg.Done()
-			Url, Title, Power, StatusCode := handle(j)
+			Url, _, _, _ := handle(j)
 			if len(Url) == 0 {
 				return
 			}
