@@ -125,6 +125,12 @@ func main() {
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
+	file1, err := os.OpenFile("alive.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer file.Close()
 	for scanner.Scan() {
 		wg.Add(1)
 		i := scanner.Text()
@@ -140,7 +146,10 @@ func main() {
 			if len(Url) == 0 {
 				return
 			}
-			fmt.Printf("%s -> %s -> %s -> %d\n", Url, Title, Power, StatusCode)
+			if _, err := file1.WriteString(Url + "\n"); err != nil {
+					fmt.Println("Error writing to file:", err)
+				}
+			//fmt.Printf("%s -> %s -> %s -> %d\n", Url, Title, Power, StatusCode)
 		}(i)
 	}
 	wg.Wait()
