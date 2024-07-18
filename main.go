@@ -1,5 +1,4 @@
 package main
-
 import (
 	"bufio"
 	"crypto/tls"
@@ -14,21 +13,17 @@ import (
 	"time"
 )
 //go build -ldflags="-s -w" -trimpath
-
 var UrlFile string
-
 func Banner(){
 	fmt.Println(`用于快速判断url是否存活，读取当前目录下的为url.txt（可指定），可支持以下格式：
 -eg:www.baidu.com
 -eg:http://www.baidu.com
 -eg:https://www.baidu.com`)
 }
-
 func Flag(){
 	flag.StringVar(&UrlFile,"f","","url.txt文件")
 	flag.Parse()
 }
-
 func HandleHttps(url string,client *http.Client)(NewUrl string, resp *http.Response,err error){
 	//默认以http协议访问
 	fmt.Println("start url:", url)
@@ -46,7 +41,6 @@ func HandleHttps(url string,client *http.Client)(NewUrl string, resp *http.Respo
 		req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36")
 		resp,err:=client.Do(req)
 		//log.Print(err)
-
 		if err != nil {
 			//此处为http/https皆不能访问，需要contrue
 			return url,resp,err
@@ -55,12 +49,10 @@ func HandleHttps(url string,client *http.Client)(NewUrl string, resp *http.Respo
 		}
 	}
 }
-
 func handle(url string) (Url string, Title string, Power []string, StatusCode int) {
 	tr := &http.Transport{
 		TLSClientConfig:    &tls.Config{InsecureSkipVerify: true},
 	}
-
 	client := &http.Client{
 		Timeout: 2 * time.Second,
 		Transport: tr,
@@ -74,14 +66,11 @@ func handle(url string) (Url string, Title string, Power []string, StatusCode in
 			title string
 			code  int
 		)
-
 		Url, title, Power, code = handlebbody(NewUrl, resp)
 		defer resp.Body.Close()
 		return Url, title, Power, code
 	}
 }
-
-
 func handlebbody(url string, resp *http.Response) (Url string, Title string, Power []string, StatusCode int) {
 	var (
 		code  int
@@ -105,9 +94,7 @@ func handlebbody(url string, resp *http.Response) (Url string, Title string, Pow
 	}
 	return url, title, Power, code
 	//fmt.Printf("%s -> %s -> %s -> %d%s",url,title,Power,code,"\n")
-
 }
-
 func main() {
 	Flag()
 	if UrlFile ==""{
@@ -130,7 +117,6 @@ func main() {
 	}
 	defer file.Close()
 	//pool := make(chan struct{}, 50000)
-
 	lineCount := 0  		
 	for scanner.Scan() {		
 		lineCount++  	
@@ -138,9 +124,19 @@ func main() {
 			wg.Wait()  	
 			lineCount = 1  	
 		}
+
+    
+          
+            
+    
+
+          
+          Expand Down
+    
+    
+  
 		i := scanner.Text()
 		if i[:4] == "http" || i[:5] == "https" {
-
 		} else {
 			i = "http://" + i
 		}
