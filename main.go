@@ -129,14 +129,10 @@ func main() {
 		return
 	}
 	defer file.Close()
-	lineCount := 0  
+	pool := make(chan struct{}, 500)
 
 	for scanner.Scan() {
-		lineCount++  
-		if lineCount > 500 {
-			wg.Wait()  
-			lineCount = 1  
-		}
+		
 		wg.Add(1)
 		i := scanner.Text()
 		if i[:4] == "http" || i[:5] == "https" {
@@ -144,9 +140,11 @@ func main() {
 		} else {
 			i = "http://" + i
 		}
+		pool <- struct{}{}
 		//fmt.Println(i)
 		go func(j string) {
 			defer wg.Done()
+			defer func() { <-pool }()
 			Url, _, _, _ := handle(j)
 			if len(Url) == 0 {
 				return
