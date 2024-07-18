@@ -129,7 +129,7 @@ func main() {
 		return
 	}
 	defer file.Close()
-	pool := make(chan struct{}, 5000)
+	pool := make(chan struct{}, 50000)
 
 	for scanner.Scan() {
 		
