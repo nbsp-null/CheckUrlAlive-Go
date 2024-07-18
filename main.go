@@ -149,7 +149,7 @@ func main() {
 			if _, err := file1.WriteString(Url + "\n"); err != nil {
 					fmt.Println("Error writing to file:", err)
 				}
-			fmt.Printf("%s -> %s -> %s -> %d\n", Url, Title, Power, StatusCode)
+			//fmt.Printf("%s \n", Url, Title, Power, StatusCode)
 		}(i)
 	}
 	wg.Wait()
