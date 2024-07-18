@@ -31,6 +31,7 @@ func Flag(){
 
 func HandleHttps(url string,client *http.Client)(NewUrl string, resp *http.Response,err error){
 	//默认以http协议访问
+	fmt.Println("start url:", url)
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36")
 	resp, err = client.Do(req)
