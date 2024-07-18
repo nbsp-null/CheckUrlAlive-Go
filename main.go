@@ -134,7 +134,7 @@ func main() {
 	lineCount := 0  		
 	for scanner.Scan() {		
 		lineCount++  	
-		if lineCount > 5000 {	
+		if lineCount > 1000 {	
 			wg.Wait()  	
 			lineCount = 1  	
 		}
